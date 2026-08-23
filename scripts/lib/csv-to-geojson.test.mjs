@@ -76,6 +76,11 @@ describe('csvToGeoJson', () => {
     expect(errors).toEqual(['kastjes.csv rij 2 (Griftpark): website moet met http:// of https:// beginnen']);
   });
 
+  it('accepts an uppercase url scheme', () => {
+    const { errors } = csvToGeoJson(csv(row({ website: 'HTTPS://EXAMPLE.NL' })), KASTJES_SCHEMA, 'kastjes.csv');
+    expect(errors).toEqual([]);
+  });
+
   it('validates clubs without a status column', () => {
     const text = 'id,naam,plaats,lat,lon,website,omschrijving,omschrijving_en\nufo,UFO,Utrecht,52.0845,5.1714,https://ufo.nl,,';
     const { geojson, errors } = csvToGeoJson(text, CLUBS_SCHEMA, 'clubs.csv');

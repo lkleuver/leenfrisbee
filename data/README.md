@@ -28,7 +28,7 @@ Na het opslaan wordt de website binnen ±2 minuten automatisch bijgewerkt. Staat
 | lon | ja | lengtegraad, bijv. `5.1261` |
 | omschrijving | nee | korte tekst in het Nederlands |
 | omschrijving_en | nee | dezelfde tekst in het Engels (anders wordt de Nederlandse getoond) |
-| foto_url | nee | link naar een foto, begint met `https://` |
+| foto_url | nee | link naar een foto, moet beginnen met `https://` (met `http://` toont de browser de foto niet, want de site zelf is beveiligd met https) |
 | website | nee | link naar een website, begint met `https://` |
 | status | ja | `actief` of `verwijderd` (verwijderde kastjes worden niet getoond maar blijven in het bestand) |
 

@@ -42,7 +42,7 @@ function validateRow(row, schema, seenIds) {
       ? [`status "${row.status}" moet ${schema.status.join(' of ')} zijn`]
       : [];
   const urls = schema.urls
-    .filter((col) => row[col] && !/^https?:\/\//.test(row[col]))
+    .filter((col) => row[col] && !/^https?:\/\//i.test(row[col]))
     .map((col) => `${col} moet met http:// of https:// beginnen`);
 
   return [...missing, ...duplicate, ...numeric, ...bbox, ...status, ...urls].filter(Boolean);
