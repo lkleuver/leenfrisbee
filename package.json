@@ -9,7 +9,10 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "build-data": "node scripts/build-data.mjs",
+    "predev": "node scripts/build-data.mjs",
+    "prebuild": "node scripts/build-data.mjs"
   },
   "dependencies": {
     "maplibre-gl": "^6.5.0",
