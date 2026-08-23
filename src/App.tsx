@@ -31,6 +31,7 @@ export default function App() {
       .catch((err: unknown) => {
         console.error(err);
         setLoadError(true);
+        setSheetOpen(true);
       });
   }, []);
 
@@ -48,7 +49,10 @@ export default function App() {
     setLang(l);
     storeLang(l);
   };
-  const toggle = (kind: Kind) => setVisible((v) => ({ ...v, [kind]: !v[kind] }));
+  const toggle = (kind: Kind) => {
+    setVisible((v) => ({ ...v, [kind]: !v[kind] }));
+    setSelected((s) => (s?.properties.kind === kind && visible[kind] ? null : s));
+  };
   const pick = (p: Place) => {
     setSelected(p);
     setSheetOpen(false);
@@ -81,7 +85,10 @@ export default function App() {
           visible={visible}
           selected={selected}
           onSelect={setSelected}
-          onError={() => setMapError(true)}
+          onError={() => {
+            setMapError(true);
+            setSheetOpen(true);
+          }}
         />
       </main>
 
