@@ -68,7 +68,15 @@ export function csvToGeoJson(csvText, schema, fileName) {
     transform: (v) => v.trim(),
   });
 
-  const parseErrors = parsed.errors.map((e) => `${fileName} rij ${(e.row ?? 0) + 2}: ${e.message}`);
+  const parseErrors = parsed.errors
+    .filter((e) => e.type !== 'FieldMismatch' && e.type !== 'Delimiter')
+    .map((e) => {
+      const row = (e.row ?? 0) + 2;
+      if (e.type === 'Quotes') {
+        return `${fileName} rij ${row} (?): aanhalingstekens (") kloppen niet`;
+      }
+      return `${fileName} rij ${row} (?): regel kon niet gelezen worden (${e.code})`;
+    });
 
   const seenIds = new Set();
   const results = parsed.data.map((row, i) => {

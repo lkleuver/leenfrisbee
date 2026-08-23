@@ -87,4 +87,16 @@ describe('csvToGeoJson', () => {
     const { errors } = csvToGeoJson(csv(row({ lat: '' }), row({ id: 'b', naam: 'B', lon: '' })), KASTJES_SCHEMA, 'kastjes.csv');
     expect(errors).toHaveLength(2);
   });
+
+  it('reports unbalanced quotes with Dutch message', () => {
+    const text = 'id,naam,plaats,adres,lat,lon,omschrijving,omschrijving_en,foto_url,website,status\n1,"Grift';
+    const { errors } = csvToGeoJson(text, KASTJES_SCHEMA, 'kastjes.csv');
+    expect(errors.some((e) => e.match(/kastjes\.csv rij 3 \(\?\): aanhalingstekens \("\) kloppen niet/))).toBe(true);
+  });
+
+  it('omits ragged row parse errors and shows only Dutch validation errors', () => {
+    const text = 'id,naam,plaats,adres,lat,lon,omschrijving,omschrijving_en,foto_url,website,status\nutrech,Name,Place,Addr,52.1,5.1,Desc,Desc_en,http://photo.jpg,http://web';
+    const { errors } = csvToGeoJson(text, KASTJES_SCHEMA, 'kastjes.csv');
+    expect(errors).toEqual(['kastjes.csv rij 2 (Name): status ontbreekt']);
+  });
 });
