@@ -20,7 +20,8 @@ const NL_MAX_BOUNDS: [[number, number], [number, number]] = [[2.0, 50.0], [8.5, 
 const INITIAL_ZOOM = 6.5;
 const SELECT_ZOOM = 14;
 const MOBILE_BREAKPOINT = 768;
-const MOBILE_SHEET_PADDING = 280;
+// Mirrors `.panel { height: 60vh }` in styles.css, so the flyTo padding covers the sheet.
+const MOBILE_SHEET_RATIO = 0.6;
 const COLORS: Record<Kind, string> = { kastje: '#e63946', club: '#1d3557' };
 const EMPTY: FeatureCollection<Point, PlaceProps> = { type: 'FeatureCollection', features: [] };
 
@@ -154,7 +155,7 @@ export function MapView({ kastjes, clubs, visible, selected, onSelect, onError }
       map.flyTo({
         center: selected.geometry.coordinates as [number, number],
         zoom: Math.max(map.getZoom(), SELECT_ZOOM),
-        padding: { top: 0, left: 0, right: 0, bottom: isMobile ? MOBILE_SHEET_PADDING : 0 },
+        padding: { top: 0, left: 0, right: 0, bottom: isMobile ? Math.round(window.innerHeight * MOBILE_SHEET_RATIO) : 0 },
       });
     }
   }, [ready, selected]);
