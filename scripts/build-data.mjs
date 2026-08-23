@@ -10,8 +10,18 @@ const FILES = [
 
 mkdirSync(OUT_DIR, { recursive: true });
 
+const readCsv = (path) => {
+  try {
+    return { text: readFileSync(path, 'utf8') };
+  } catch (err) {
+    return { error: `${path}: bestand kon niet gelezen worden (${err.code ?? err.message})` };
+  }
+};
+
 const allErrors = FILES.flatMap(({ csv, out, schema }) => {
-  const { geojson, errors } = csvToGeoJson(readFileSync(csv, 'utf8'), schema, basename(csv));
+  const { text, error } = readCsv(csv);
+  if (error) return [error];
+  const { geojson, errors } = csvToGeoJson(text, schema, basename(csv));
   if (errors.length === 0) {
     writeFileSync(out, JSON.stringify(geojson));
     console.log(`${csv} → ${out} (${geojson.features.length} punten)`);
