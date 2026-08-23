@@ -144,3 +144,8 @@ vite.config.ts.timestamp-*
 
 # superpowers scratch
 .superpowers/
+
+# generated data and test output
+public/data/
+test-results/
+playwright-report/
