@@ -40,8 +40,9 @@ test('layer chips toggle map layers and list contents', async ({ page, isMobile 
 
 test('language toggle switches ui strings and persists', async ({ page }) => {
   await page.goto('./');
-  await page.getByRole('button', { name: 'EN', exact: true }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Leenfrisbee cabinets');
+  await page.getByRole('button', { name: 'NL', exact: true }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Leenfrisbee kastjes');
   await page.reload();
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Leenfrisbee cabinets');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Leenfrisbee kastjes');
 });
