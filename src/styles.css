@@ -1,2 +1,5 @@
 * { box-sizing: border-box; }
 html, body, #root { margin: 0; height: 100%; font-family: system-ui, sans-serif; }
+.app { display: grid; grid-template-columns: 360px 1fr; height: 100%; }
+.panel { padding: 1rem; overflow: auto; }
+.map { height: 100%; }
