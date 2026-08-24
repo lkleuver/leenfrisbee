@@ -20,7 +20,7 @@ export default function App() {
   const [data, setData] = useState<Data | null>(null);
   const [loadError, setLoadError] = useState(false);
   const [mapError, setMapError] = useState(false);
-  const [visible, setVisible] = useState<Visibility>({ kastje: true, club: true });
+  const [visible, setVisible] = useState<Visibility>({ kastje: true, club: false });
   const [selected, setSelected] = useState<Place | null>(null);
   const [query, setQuery] = useState('');
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -80,6 +80,7 @@ export default function App() {
 
       <main className="mapwrap">
         <MapView
+          t={t}
           kastjes={data?.kastjes ?? []}
           clubs={data?.clubs ?? []}
           visible={visible}

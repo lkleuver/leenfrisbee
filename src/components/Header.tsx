@@ -11,9 +11,12 @@ const LANGS: readonly Lang[] = ['nl', 'en'];
 export function Header({ lang, onLangChange, t }: Props) {
   return (
     <header className="header">
-      <div>
-        <h1 className="header__title">{t.title}</h1>
-        <p className="header__tagline">{t.tagline}</p>
+      <div className="header__brand">
+        <span className="disc" aria-hidden="true" />
+        <div>
+          <h1 className="header__title">{t.title}</h1>
+          <p className="header__tagline">{t.tagline}</p>
+        </div>
       </div>
       <div className="lang" role="group" aria-label={t.language}>
         {LANGS.map((l) => (
