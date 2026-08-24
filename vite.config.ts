@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/leenfrisbee/',
+  base: '/',
   test: {
     include: ['scripts/**/*.test.mjs', 'src/**/*.test.ts'],
   },

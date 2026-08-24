@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const PORT = 4173;
-const BASE = '/leenfrisbee/';
+const BASE = '/';
 
 export default defineConfig({
   testDir: 'e2e',
