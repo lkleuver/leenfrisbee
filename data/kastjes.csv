@@ -1,3 +1,8 @@
-id,naam,plaats,adres,lat,lon,omschrijving,omschrijving_en,foto_url,website,status
-utrecht-griftpark,Griftpark,Utrecht,Griftpark bij de hoofdingang,52.1003,5.1261,Voorbeeld: kastje bij de ingang van het park.,Example: cabinet at the park entrance.,,,actief
-amsterdam-westerpark,Westerpark,Amsterdam,Westerpark bij het grasveld,52.3868,4.8766,Voorbeeld: kastje naast het grote grasveld.,Example: cabinet next to the big lawn.,,,actief
+id,naam,plaats,adres,lat,lon,omschrijving,omschrijving_en,foto_url,website,status,club_id
+nieuwegein-down-under,Down Under,Nieuwegein,Recreatiegebied Down Under bij het strand,52.04911,5.12752,,,,,actief,ufo-utrecht
+zwolle-hanekamp,Hanekamp,Zwolle,Hanekamp 57,52.51234,6.10758,,,,,actief,bluefingers-ultimate-zwolle
+venlo-floriadeterrein,Floriadeterrein,Venlo,,51.40415,6.12222,,,,,actief,fg-de-scheive-schief-venlo
+venlo-vikingpad,Vikingpad,Venlo,Vikingpad,51.35846,6.15225,,,,,actief,fg-de-scheive-schief-venlo
+venlo-julianapark,Julianapark,Venlo,,51.36856,6.17474,,,,,actief,fg-de-scheive-schief-venlo
+venlo-gulickstraat,Veldje Gulickstraat,Venlo,Gulickstraat,51.36977,6.18839,,,,,actief,fg-de-scheive-schief-venlo
+utrecht-jeu-de-boules-bar,JEU de boules bar,Utrecht,Paardenveld 3,52.09511,5.11097,,,,,actief,ufo-utrecht
