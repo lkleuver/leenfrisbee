@@ -3,14 +3,16 @@ import type { Place } from '../lib/types';
 
 interface Props {
   place: Place;
+  club: Place | null;
   lang: Lang;
   t: Strings;
   onBack: () => void;
+  onPickClub: (club: Place) => void;
 }
 
 const routeUrl = ([lon, lat]: number[]) => `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
 
-export function DetailPanel({ place, lang, t, onBack }: Props) {
+export function DetailPanel({ place, club, lang, t, onBack, onPickClub }: Props) {
   const p = place.properties;
   const description = (lang === 'en' && p.omschrijving_en) || p.omschrijving;
   return (
@@ -26,6 +28,14 @@ export function DetailPanel({ place, lang, t, onBack }: Props) {
       </p>
       {p.foto_url && <img className="detail__photo" src={p.foto_url} alt={p.naam} loading="lazy" />}
       {description && <p className="detail__text">{description}</p>}
+      {club && (
+        <p className="detail__text">
+          {t.club}:{' '}
+          <button type="button" className="linklike" onClick={() => onPickClub(club)}>
+            {club.properties.naam}
+          </button>
+        </p>
+      )}
       <div className="detail__actions">
         <a className="btn" href={routeUrl(place.geometry.coordinates)} target="_blank" rel="noopener noreferrer">
           {t.route}

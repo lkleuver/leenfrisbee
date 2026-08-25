@@ -31,6 +31,7 @@ Na het opslaan wordt de website binnen ±2 minuten automatisch bijgewerkt. Staat
 | foto_url | nee | link naar een foto, moet beginnen met `https://` (met `http://` toont de browser de foto niet, want de site zelf is beveiligd met https) |
 | website | nee | link naar een website, begint met `https://` |
 | status | ja | `actief` of `verwijderd` (verwijderde kastjes worden niet getoond maar blijven in het bestand) |
+| club_id | nee | `id` van een club uit `clubs.csv`, bijv. `ufo-utrecht`. Toont de club bij de details van het kastje en tekent een lijntje op de kaart. |
 
 ## Kolommen in `clubs.csv`
 

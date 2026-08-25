@@ -92,3 +92,11 @@ export function csvToGeoJson(csvText, schema, fileName) {
     errors: [...parseErrors, ...results.flatMap((r) => r.errors)],
   };
 }
+
+/** Check that every kastje club_id refers to an existing club. Returns Dutch error messages. */
+export function validateClubRefs(kastjesGeojson, clubsGeojson) {
+  const clubIds = new Set(clubsGeojson.features.map((f) => f.properties.id));
+  return kastjesGeojson.features
+    .filter((f) => f.properties.club_id && !clubIds.has(f.properties.club_id))
+    .map((f) => `kastjes.csv (${f.properties.naam}): club_id "${f.properties.club_id}" bestaat niet in clubs.csv`);
+}

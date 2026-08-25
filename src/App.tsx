@@ -60,6 +60,11 @@ export default function App() {
 
   const panelOpen = sheetOpen || selected !== null;
 
+  const linkedClub =
+    (selected?.properties.club_id &&
+      data?.clubs.find((c) => c.properties.id === selected.properties.club_id)) ||
+    null;
+
   return (
     <div className="app">
       <div className="topbar">
@@ -72,7 +77,7 @@ export default function App() {
         {mapError && <p className="notice" role="alert">{t.mapError}</p>}
         {!data && !loadError && <p className="notice">{t.loading}</p>}
         {selected ? (
-          <DetailPanel place={selected} lang={lang} t={t} onBack={() => setSelected(null)} />
+          <DetailPanel place={selected} club={linkedClub} lang={lang} t={t} onBack={() => setSelected(null)} onPickClub={pick} />
         ) : (
           <SearchList places={listed} query={query} onQueryChange={setQuery} onPick={pick} onClose={() => setSheetOpen(false)} t={t} />
         )}

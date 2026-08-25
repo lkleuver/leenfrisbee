@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { csvToGeoJson, KASTJES_SCHEMA, CLUBS_SCHEMA } from './csv-to-geojson.mjs';
+import { csvToGeoJson, validateClubRefs, KASTJES_SCHEMA, CLUBS_SCHEMA } from './csv-to-geojson.mjs';
 
 const HEADER = 'id,naam,plaats,adres,lat,lon,omschrijving,omschrijving_en,foto_url,website,status';
 const row = (overrides = {}) => {
@@ -103,5 +103,21 @@ describe('csvToGeoJson', () => {
     const text = 'id,naam,plaats,adres,lat,lon,omschrijving,omschrijving_en,foto_url,website,status\nutrech,Name,Place,Addr,52.1,5.1,Desc,Desc_en,http://photo.jpg,http://web';
     const { errors } = csvToGeoJson(text, KASTJES_SCHEMA, 'kastjes.csv');
     expect(errors).toEqual(['kastjes.csv rij 2 (Name): status ontbreekt']);
+  });
+});
+
+describe('validateClubRefs', () => {
+  const fc = (...features) => ({ type: 'FeatureCollection', features });
+  const kastje = (props) => ({ type: 'Feature', properties: { naam: 'Griftpark', ...props } });
+  const club = (id) => ({ type: 'Feature', properties: { id } });
+
+  it('accepts a club_id that exists and an empty or absent club_id', () => {
+    const kastjes = fc(kastje({ club_id: 'ufo-utrecht' }), kastje({ club_id: '' }), kastje({}));
+    expect(validateClubRefs(kastjes, fc(club('ufo-utrecht')))).toEqual([]);
+  });
+
+  it('reports a club_id that does not exist', () => {
+    const errors = validateClubRefs(fc(kastje({ club_id: 'nope' })), fc(club('ufo-utrecht')));
+    expect(errors).toEqual(['kastjes.csv (Griftpark): club_id "nope" bestaat niet in clubs.csv']);
   });
 });

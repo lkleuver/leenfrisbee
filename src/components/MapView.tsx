@@ -241,6 +241,17 @@ export function MapView({
       };
 
       map.on("load", () => {
+        map.addSource("club-link", { type: "geojson", data: EMPTY });
+        map.addLayer({
+          id: "club-link",
+          type: "line",
+          source: "club-link",
+          paint: {
+            "line-color": MARKER_STROKE,
+            "line-width": 2,
+            "line-dasharray": [1.5, 2],
+          },
+        });
         KINDS.forEach((kind) => {
           map.addSource(kind, { type: "geojson", data: EMPTY });
           map.addLayer({
@@ -324,6 +335,29 @@ export function MapView({
   useEffect(() => {
     const map = mapRef.current;
     if (!ready || !map) return;
+    const linkedClub =
+      selected?.properties.club_id &&
+      clubs.find((c) => c.properties.id === selected.properties.club_id);
+    (map.getSource("club-link") as GeoJSONSource).setData(
+      selected && linkedClub
+        ? {
+            type: "FeatureCollection",
+            features: [
+              {
+                type: "Feature",
+                properties: {},
+                geometry: {
+                  type: "LineString",
+                  coordinates: [
+                    selected.geometry.coordinates,
+                    linkedClub.geometry.coordinates,
+                  ],
+                },
+              },
+            ],
+          }
+        : EMPTY,
+    );
     KINDS.forEach((kind) => {
       const id =
         selected?.properties.kind === kind ? selected.properties.id : "";
@@ -344,7 +378,7 @@ export function MapView({
         },
       });
     }
-  }, [ready, selected]);
+  }, [ready, selected, clubs]);
 
   return <div ref={containerRef} className="map" aria-label="Kaart" />;
 }

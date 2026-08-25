@@ -84,6 +84,8 @@ a { color: inherit; }
 .detail__town { color: var(--muted); }
 .detail__photo { width: 100%; border-radius: var(--radius); margin-top: 0.5rem; }
 .detail__text { margin-top: 0.5rem; line-height: 1.5; }
+.linklike { border: 0; background: transparent; padding: 0; font: inherit; font-weight: 700; color: var(--accent-text); text-decoration: underline; cursor: pointer; }
+
 .detail__actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap; }
 
 .btn { display: inline-block; padding: 0.55rem 1.1rem; border-radius: var(--pill); border: 1.5px solid var(--kastje); background: var(--kastje); color: var(--on-accent); font-weight: 700; text-decoration: none; }

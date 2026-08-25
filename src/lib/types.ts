@@ -14,6 +14,7 @@ export interface PlaceProps {
   foto_url?: string;
   website?: string;
   status?: string;
+  club_id?: string;
 }
 
 export type Place = Feature<Point, PlaceProps>;
