@@ -4,6 +4,7 @@ import { Header } from './components/Header';
 import { LayerToggle } from './components/LayerToggle';
 import { MapView } from './components/MapView';
 import { SearchList } from './components/SearchList';
+import { formatDeeplink, parseDeeplink } from './lib/deeplink';
 import { filterByQuery } from './lib/filter';
 import { detectLang, readStoredLang, storeLang, strings, type Lang } from './lib/i18n';
 import { loadPlaces } from './lib/load';
@@ -38,6 +39,22 @@ export default function App() {
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
+
+  useEffect(() => {
+    if (!data) return;
+    const link = parseDeeplink(window.location.hash);
+    if (!link) return;
+    const pool = link.kind === 'kastje' ? data.kastjes : data.clubs;
+    const place = pool.find((p) => p.properties.id === link.id);
+    if (!place) return;
+    setSelected(place);
+    setVisible((v) => (v[link.kind] ? v : { ...v, [link.kind]: true }));
+  }, [data]);
+
+  useEffect(() => {
+    const hash = formatDeeplink(selected);
+    history.replaceState(null, '', hash || window.location.pathname + window.location.search);
+  }, [selected]);
 
   const listed = useMemo(() => {
     if (!data) return [];
