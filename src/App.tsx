@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { DetailPanel } from './components/DetailPanel';
 import { Header } from './components/Header';
 import { LayerToggle } from './components/LayerToggle';
@@ -40,10 +40,14 @@ export default function App() {
     document.documentElement.lang = lang;
   }, [lang]);
 
+  // Captured before the hash-writing effect below clears the URL on mount.
+  const initialLink = useRef(parseDeeplink(window.location.hash));
+
   useEffect(() => {
     if (!data) return;
-    const link = parseDeeplink(window.location.hash);
+    const link = initialLink.current;
     if (!link) return;
+    initialLink.current = null;
     const pool = link.kind === 'kastje' ? data.kastjes : data.clubs;
     const place = pool.find((p) => p.properties.id === link.id);
     if (!place) return;
