@@ -38,27 +38,34 @@ const SELECT_ZOOM = 14;
 const MOBILE_BREAKPOINT = 768;
 // Mirrors `.panel { height: 60vh }` in styles.css, so the flyTo padding covers the sheet.
 const MOBILE_SHEET_RATIO = 0.6;
-const COLORS: Record<Kind, string> = { kastje: "#ff7a1a", club: "#c9e85c" };
-const MARKER_STROKE = "#14452f"; // dark rim keeps both disc colours visible on the light basemap
-const SEA = "#a8ccc3";
-const LAND = "#f0f2e6";
+// Bosrand palette (see styles.css): sea-green kastjes, gold club rings, ink for the selection.
+const ACCENT = "#4fb59f";
+const CLUB = "#c9b26a";
+const INK = "#1d1b17";
+const PAPER = "#fbf9f2";
+const SEA = "#cddcd6";
+const LAND = "#eeebe0";
+const KASTJE_ICON = "kastje-icon";
+const KASTJE_SELECTED_ICON = "kastje-selected-icon";
+const CLUB_RADIUS = 7;
+const CLUB_RADIUS_OFF = 3.5;
 // The PDOK standaard style has no background layer (the ocean just stops at the tile edge) and
 // its default palette clashes with ours. We fetch the style JSON, remap every colour onto the
 // Speelveld palette, and prepend a sea-coloured background — the NL land fill on top of it
 // gives a crisp country silhouette for free.
 const RECOLOR: Record<string, string> = {
-  "#FFFFFF": "#f0f2e6", // land, rail dashes, tunnel casings, A-road numbers
+  "#FFFFFF": LAND, // land, rail dashes, tunnel casings, A-road numbers
   "#80BDE3": SEA, // sea, lakes, waterways
-  "#90C0E4": "#b9d6cb", // tidal flats
+  "#90C0E4": "#bfd2cc", // tidal flats
   "#004DE3": "#3a7268", // water labels
-  "#FDF6BB": "#efe9c2", // sand
+  "#FDF6BB": "#ece5cc", // sand
   "#DDA1C1": "#d9cba4", // heath
-  "#C3DBB5": "#b9cfa6", // forest
-  "#E3DCE7": "#e3e0d0", // built-up area
-  "#D1D1D1": "#cdcbbb", // buildings
-  "#F9E11E": "#efd75c", // motorways
-  "#FCEF84": "#f4e9a6", // secondary roads
-  "#E69800": "#c9993b", // road casings
+  "#C3DBB5": "#d3dbc3", // forest
+  "#E3DCE7": "#e4e1d4", // built-up area
+  "#D1D1D1": "#d3d0c2", // buildings
+  "#F9E11E": "#e9d68f", // motorways
+  "#FCEF84": "#f1e8c4", // secondary roads
+  "#E69800": "#c4ad74", // road casings
   "#FF7F7F": "#b9873b", // A-road number halo
   "#FFFFBE": "#f0ecc6", // N-road number halo
   "#000000": "#23301f", // place-name text
@@ -98,6 +105,46 @@ async function loadStyle(): Promise<StyleSpecification> {
     ],
   };
 }
+// Kastje marker: a rounded box with a frisbee in it (matches `.mk--kastje` in styles.css).
+// Drawn on a 2x canvas so it stays crisp on retina screens.
+const drawKastjeIcon = (size: number, fill: string, halo: number): ImageData => {
+  const scale = 2;
+  const total = (size + halo * 2) * scale;
+  const canvas = document.createElement("canvas");
+  canvas.width = total;
+  canvas.height = total;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("2d canvas context unavailable");
+  ctx.scale(scale, scale);
+  const c = halo + size / 2;
+  const radius = size * 0.28;
+  if (halo > 0) {
+    ctx.fillStyle = "rgba(29,27,23,0.18)";
+    ctx.beginPath();
+    ctx.roundRect(0, 0, size + halo * 2, size + halo * 2, radius + halo);
+    ctx.fill();
+  }
+  ctx.fillStyle = fill;
+  ctx.strokeStyle = PAPER;
+  ctx.lineWidth = size >= 30 ? 3 : 2;
+  ctx.beginPath();
+  ctx.roundRect(halo + ctx.lineWidth / 2, halo + ctx.lineWidth / 2, size - ctx.lineWidth, size - ctx.lineWidth, radius);
+  ctx.fill();
+  ctx.stroke();
+  const disc = [
+    { r: size * 0.2, color: PAPER },
+    { r: size * 0.12, color: ACCENT },
+    { r: size * 0.05, color: PAPER },
+  ];
+  disc.forEach(({ r, color }) => {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(c, c, r, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  return ctx.getImageData(0, 0, total, total);
+};
+
 const EMPTY: FeatureCollection<Point, PlaceProps> = {
   type: "FeatureCollection",
   features: [],
@@ -234,49 +281,76 @@ export function MapView({
           onSelectRef.current(place);
         });
         el.append(kindEl, nameEl, townEl, btn);
-        popupRef.current = new maplibregl.Popup({ offset: 14 })
+        popupRef.current = new maplibregl.Popup({ offset: 18 })
           .setLngLat(place.geometry.coordinates as [number, number])
           .setDOMContent(el)
           .addTo(map);
       };
 
       map.on("load", () => {
+        map.addImage(KASTJE_ICON, drawKastjeIcon(24, ACCENT, 0), { pixelRatio: 2 });
+        map.addImage(KASTJE_SELECTED_ICON, drawKastjeIcon(36, INK, 6), { pixelRatio: 2 });
         map.addSource("club-link", { type: "geojson", data: EMPTY });
         map.addLayer({
           id: "club-link",
           type: "line",
           source: "club-link",
           paint: {
-            "line-color": MARKER_STROKE,
+            "line-color": ACCENT,
             "line-width": 2,
             "line-dasharray": [1.5, 2],
           },
         });
         KINDS.forEach((kind) => {
           map.addSource(kind, { type: "geojson", data: EMPTY });
-          map.addLayer({
-            id: kind,
-            type: "circle",
-            source: kind,
-            paint: {
-              "circle-radius": 7,
-              "circle-color": COLORS[kind],
-              "circle-stroke-width": 2,
-              "circle-stroke-color": MARKER_STROKE,
-            },
-          });
-          map.addLayer({
-            id: `${kind}-selected`,
-            type: "circle",
-            source: kind,
-            filter: ["==", ["get", "id"], ""],
-            paint: {
-              "circle-radius": 13,
-              "circle-color": "rgba(0,0,0,0)",
-              "circle-stroke-width": 3,
-              "circle-stroke-color": MARKER_STROKE,
-            },
-          });
+        });
+        // Clubs: open gold ring. Drawn first so kastjes sit on top where they overlap.
+        map.addLayer({
+          id: "club",
+          type: "circle",
+          source: "club",
+          paint: {
+            "circle-radius": CLUB_RADIUS,
+            "circle-color": PAPER,
+            "circle-stroke-width": 4,
+            "circle-stroke-color": CLUB,
+          },
+        });
+        map.addLayer({
+          id: "club-selected",
+          type: "circle",
+          source: "club",
+          filter: ["==", ["get", "id"], ""],
+          paint: {
+            "circle-radius": 12,
+            "circle-color": PAPER,
+            "circle-stroke-width": 5,
+            "circle-stroke-color": INK,
+          },
+        });
+        // Kastjes: box-with-frisbee icon.
+        map.addLayer({
+          id: "kastje",
+          type: "symbol",
+          source: "kastje",
+          layout: {
+            "icon-image": KASTJE_ICON,
+            "icon-allow-overlap": true,
+            "icon-ignore-placement": true,
+          },
+        });
+        map.addLayer({
+          id: "kastje-selected",
+          type: "symbol",
+          source: "kastje",
+          filter: ["==", ["get", "id"], ""],
+          layout: {
+            "icon-image": KASTJE_SELECTED_ICON,
+            "icon-allow-overlap": true,
+            "icon-ignore-placement": true,
+          },
+        });
+        KINDS.forEach((kind) => {
           map.on("click", kind, (e: MapLayerMouseEvent) => {
             const id = e.features?.[0]?.properties?.id;
             const place = findPlace(kind, id);
@@ -327,8 +401,8 @@ export function MapView({
     const kastjeVis = visible.kastje ? "visible" : "none";
     map.setLayoutProperty("kastje", "visibility", kastjeVis);
     map.setLayoutProperty("kastje-selected", "visibility", kastjeVis);
-    map.setPaintProperty("club", "circle-radius", visible.club ? 7 : 3.5);
-    map.setPaintProperty("club", "circle-stroke-width", visible.club ? 2 : 1);
+    map.setPaintProperty("club", "circle-radius", visible.club ? CLUB_RADIUS : CLUB_RADIUS_OFF);
+    map.setPaintProperty("club", "circle-stroke-width", visible.club ? 4 : 2);
   }, [ready, visible]);
 
   // Highlight + fly to selection.

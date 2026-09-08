@@ -79,6 +79,7 @@ export default function App() {
     setSheetOpen(false);
   };
 
+  const counts = { kastje: data?.kastjes.length ?? 0, club: data?.clubs.length ?? 0 };
   const panelOpen = sheetOpen || selected !== null;
 
   const linkedClub =
@@ -90,7 +91,7 @@ export default function App() {
     <div className="app">
       <div className="topbar">
         <Header lang={lang} onLangChange={changeLang} t={t} />
-        <LayerToggle visible={visible} onToggle={toggle} t={t} />
+        <LayerToggle visible={visible} counts={counts} onToggle={toggle} t={t} />
       </div>
 
       <aside className={`panel${panelOpen ? ' panel--open' : ''}`}>

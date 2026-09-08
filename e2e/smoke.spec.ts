@@ -43,7 +43,7 @@ test('search narrows the list and picking an item opens its details', async ({ p
   await expect(page.getByRole('heading', { level: 2 })).toHaveCount(0);
 });
 
-test('layer chips toggle map layers and list contents', async ({ page, isMobile }) => {
+test('layer tabs toggle map layers and list contents', async ({ page, isMobile }) => {
   const counts = await loadCounts(page);
   test.skip(counts.clubs === 0, 'no clubs in the current data set');
   await expect(page.locator('canvas.maplibregl-canvas')).toBeVisible();

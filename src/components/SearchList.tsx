@@ -32,7 +32,7 @@ export function SearchList({ places, query, onQueryChange, onPick, onClose, t }:
         {places.map((p) => (
           <li key={`${p.properties.kind}-${p.properties.id}`}>
             <button type="button" className={`list__item list__item--${p.properties.kind}`} onClick={() => onPick(p)}>
-              <span className="chip__dot" aria-hidden="true" />
+              <span className={`mk mk--${p.properties.kind}`} aria-hidden="true" />
               <span className="list__name">{p.properties.naam}</span>
               <span className="list__town">{p.properties.plaats}</span>
             </button>
