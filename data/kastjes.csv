@@ -1,6 +1,7 @@
 id,naam,plaats,adres,lat,lon,omschrijving,omschrijving_en,foto_url,website,status,club_id
 nieuwegein-down-under,Down Under,Nieuwegein,Recreatiegebied Down Under bij het strand,52.04911,5.12752,,,,,actief,ufo-utrecht
 zwolle-hanekamp,Hanekamp,Zwolle,Hanekamp 57,52.51234,6.10758,,,,,actief,bluefingers-ultimate-zwolle
+zwolle-windesheim,Windesheim,Windesheim,Bergweg 7,52.44765,6.13097,,,,,actief,bluefingers-ultimate-zwolle
 venlo-floriadeterrein,Floriadeterrein,Venlo,,51.40415,6.12222,,,,,actief,fg-de-scheive-schief-venlo
 venlo-vikingpad,Vikingpad,Venlo,Vikingpad,51.35846,6.15225,,,,,actief,fg-de-scheive-schief-venlo
 venlo-julianapark,Julianapark,Venlo,,51.36856,6.17474,,,,,actief,fg-de-scheive-schief-venlo
@@ -16,7 +17,7 @@ loosdrecht-godelindelaan,Godelindelaan,Loosdrecht,Godelindelaan,52.19750,5.13806
 hilversum-schans,Schans,Hilversum,Schans,52.23216,5.20107,,,,,actief,de-gooische-solarpunks-hilversum
 kortenhoef-curtevenneschool,Curtevenneschool,Kortenhoef,Parklaan 3,52.24170,5.11338,,,,,actief,de-gooische-solarpunks-hilversum
 hilversum-calisthenics-park-kerkelanden,Calisthenics park Kerkelanden,Hilversum,Kloosterlaan 9,52.21896,5.13696,,,,,actief,de-gooische-solarpunks-hilversum
-hilversum-colosseum,Colosseum,Hilversum,Colosseum,52.21235,5.19237,,,,,actief,de-gooische-solarpunks-hilversum
+hilversum-colosseum,Colosseum,Hilversum,Colosseum,52.21275,5.19081,,,,,actief,de-gooische-solarpunks-hilversum
 hilversum-hoornboegsweg,Hoornboegsweg,Hilversum,Hoornboegsweg,52.20589,5.16796,,,,,actief,de-gooische-solarpunks-hilversum
 hilversum-speeltuintje-oude-haven,Speeltuintje Oude Haven,Hilversum,Oude Haven,52.21986,5.16682,,,,,actief,de-gooische-solarpunks-hilversum
 hilversum-speeltuin-stalpaertstraat,Speeltuin Stalpaertstraat,Hilversum,Stalpaertstraat,52.23984,5.18818,,,,,actief,de-gooische-solarpunks-hilversum
